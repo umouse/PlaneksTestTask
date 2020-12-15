@@ -1,3 +1,4 @@
 from django.contrib import admin
+from schemas.models import Schema
 
-# Register your models here.
+admin.site.register(Schema)

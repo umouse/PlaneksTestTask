@@ -1,16 +1,15 @@
 from django.db import models
-from django.utils import timezone
 
 
 class Schema(models.Model):
-    user_id = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    name = models.TextField()
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
     column_separator = models.CharField(max_length=2)
     string_separator = models.CharField(max_length=2)
 
 
 class Columns(models.Model):
-    schema_id = models.ForeignKey(Schema, on_delete=models.CASCADE)
+    schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
     name = models.TextField()
     range_from = models.IntegerField()
     range_to = models.IntegerField()
