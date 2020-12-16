@@ -4,16 +4,37 @@ from django.db import models
 class Schema(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    column_separator = models.CharField(max_length=2)
-    string_separator = models.CharField(max_length=2)
+
+    COMMA = ','
+    SEMICOLON = ';'
+    DOUBLEQUOTE = '"'
+    SINGLEQUOTE = "'"
+
+    COLUMN_SEPARATOR_CHOICES = [
+        (COMMA, 'Comma (,)'),
+        (SEMICOLON, 'Semicolon (;)')
+    ]
+    STRING_CHARACTER_CHOICES = [
+        (DOUBLEQUOTE, 'Double-quote (")'),
+        (SINGLEQUOTE, "Single-quote (')")
+    ]
+    column_separator = models.CharField(
+        max_length=2,
+        choices=COLUMN_SEPARATOR_CHOICES
+    )
+
+    string_character = models.CharField(
+        max_length=2,
+        choices=STRING_CHARACTER_CHOICES
+    )
 
 
-class Columns(models.Model):
+class Column(models.Model):
     schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
-    name = models.TextField()
-    range_from = models.IntegerField()
-    range_to = models.IntegerField()
-    order = models.IntegerField()
+    name = models.CharField(max_length=200)
+    range_from = models.IntegerField(null=True)
+    range_to = models.IntegerField(null=True)
+    order = models.IntegerField(null=True)
 
     FULL_NAME = 'Full name'
     JOB = 'Job'
@@ -42,4 +63,6 @@ class Columns(models.Model):
         max_length=12,
         choices=COLUMN_TYPE_CHOICES
     )
+
+
 

@@ -1,5 +1,9 @@
-{% for schema in object_list %}
-    {{ schema }}
-{% empty %}
-   <p>No schemas yet.</p>
-{% endfor %}
+{% extends 'schemas/base.html' %}
+
+{% block content %}
+    {% for schema in object_list %}
+        {{ schema.name }}
+    {% empty %}
+       <p>No schemas yet.</p>
+    {% endfor %}
+{% endblock %}
