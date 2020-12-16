@@ -4,6 +4,8 @@ from django.db import models
 class Schema(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
 
     COMMA = ','
     SEMICOLON = ';'
