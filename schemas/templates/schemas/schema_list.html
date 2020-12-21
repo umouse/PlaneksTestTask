@@ -1,6 +1,12 @@
 {% extends 'schemas/base.html' %}
 
 {% block content %}
+
+<h1>Data schemas</h1>
+<a href="{% url 'SchemaCreateView' %}">
+    <button type="button" class="btn btn-success">New schema</button>
+</a>
+
 <table class="table">
     <thead>
     <tr>
@@ -17,8 +23,10 @@
         <td>{{ schema.name }}</td>
         <td>{{ schema.updated_at }}</td>
         <td>
-            <button type="button" class="btn btn-link">Edit scheme</button>
-            <button type="button" class="btn btn-link text-danger" >Delete</button>
+            <a href="{% url 'SchemaUpdateView' schema.id %}"><button type="button" class="btn btn-link">Edit scheme</button></a>
+            <a href="{% url 'SchemaDeleteView' schema.id %}">
+                <button type="button" class="btn btn-link text-danger">Delete</button>
+            </a>
         </td>
     </tr>
     {% empty %}

@@ -5,10 +5,9 @@
     <h1>New Schema</h1>
     <form method="post">{% csrf_token %}
         {{ form.as_p }}
-        <button type="button" class="btn btn-primary" type ="submit">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
         <h2>Columns</h2>
             {% crispy columns helper %}
         <button type="button" class="btn btn-primary">Add column</button>
-
     </form>
 {% endblock %}
