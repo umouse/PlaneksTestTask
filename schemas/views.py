@@ -1,10 +1,10 @@
 from crispy_forms.helper import FormHelper
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.forms.models import inlineformset_factory
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-from schemas.models import Schema, Column
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, FormView
+from schemas.models import Schema, Column, DataSet
+from schemas.forms import DataSetForm
 
 column_formset = inlineformset_factory(
             Schema, Column, fields=('name', 'column_types', 'order'),
@@ -80,3 +80,11 @@ class SchemaDeleteView(DeleteView):
     success_url = reverse_lazy('SchemaListView')
 
 
+class DataSetListView(ListView):
+    model = DataSet
+
+
+class DataSetView(FormView):
+    template_name = 'schemas/dataset_list.html'
+    form_class = DataSetForm
+    success_url = reverse_lazy('DataSetView')

@@ -7,7 +7,8 @@
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Submit</button>
         <h2>Columns</h2>
-            {% crispy columns helper %}
+        {{columns.as_p}}
+<!--            {% crispy columns helper %}-->
         <button type="button" class="btn btn-primary">Add column</button>
     </form>
 {% endblock %}

@@ -67,4 +67,13 @@ class Column(models.Model):
     )
 
 
+class DataSet(models.Model):
+    schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now_add=True)
+    rows = models.IntegerField(null=True)
 
+    class Status(models.IntegerChoices):
+        READY = 1
+        PROCESSING = 2
+
+    status = models.IntegerField(choices=Status.choices)

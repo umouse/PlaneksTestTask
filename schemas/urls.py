@@ -6,4 +6,6 @@ urlpatterns = [
     path('schemas_list/', views.SchemaListView.as_view(), name='SchemaListView'),
     path('update_schema/<int:pk>/', views.SchemaUpdateView.as_view(), name='SchemaUpdateView'),
     path('delete_schema/<int:pk>/', views.SchemaDeleteView.as_view(), name='SchemaDeleteView'),
+    path('generate_data/<int:pk>/', views.DataSetView.as_view(), name='DataSetView'),
+    #path('datasets_list/<int:pk>/', views. DataSetListView.as_view(), name='DataSetListView'),
 ]

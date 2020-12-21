@@ -20,7 +20,7 @@
     {% for schema in object_list %}
     <tr>
         <th scope="row">{{schema.id}}</th>
-        <td>{{ schema.name }}</td>
+        <td><a href="{% url 'DataSetView' schema.id %}"><button type="button" class="btn btn-link">{{schema.name }}</button></a></td>
         <td>{{ schema.updated_at }}</td>
         <td>
             <a href="{% url 'SchemaUpdateView' schema.id %}"><button type="button" class="btn btn-link">Edit scheme</button></a>
