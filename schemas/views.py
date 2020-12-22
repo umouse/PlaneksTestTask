@@ -3,6 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.forms.models import inlineformset_factory
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, FormView
+from django.views.generic.edit import FormMixin
+
 from schemas.models import Schema, Column, DataSet
 from schemas.forms import DataSetForm
 
@@ -80,11 +82,36 @@ class SchemaDeleteView(DeleteView):
     success_url = reverse_lazy('SchemaListView')
 
 
-class DataSetListView(ListView):
+class DataSetView(FormMixin, ListView):
     model = DataSet
-
-
-class DataSetView(FormView):
-    template_name = 'schemas/dataset_list.html'
     form_class = DataSetForm
-    success_url = reverse_lazy('DataSetView')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(schema_id=self.schema_id)
+
+
+    def form_valid(self, form):
+        form.instance.schema_id = self.schema_id
+        form.instance.status = DataSet.Status.PROCESSING
+
+        form.save()
+        return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        self.schema_id = kwargs["pk"]
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return self.request.path

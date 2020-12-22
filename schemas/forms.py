@@ -1,5 +1,9 @@
-from django import forms
+from django.forms import ModelForm
+from schemas.models import DataSet
 
 
-class DataSetForm(forms.Form):
-    rows = forms.IntegerField()
+class DataSetForm(ModelForm):
+    class Meta:
+        model = DataSet
+        fields = ['rows']
+

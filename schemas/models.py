@@ -72,8 +72,11 @@ class DataSet(models.Model):
     created_at = models.DateField(auto_now_add=True)
     rows = models.IntegerField(null=True)
 
-    class Status(models.IntegerChoices):
-        READY = 1
-        PROCESSING = 2
+    class Status(models.TextChoices):
+        READY = 'Ready'
+        PROCESSING = "Processing"
 
-    status = models.IntegerField(choices=Status.choices)
+    status = models.CharField(
+        max_length=15,
+        choices=Status.choices
+    )
