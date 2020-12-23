@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.forms.models import inlineformset_factory
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, FormView
 from django.views.generic.edit import FormMixin
+from schemas.tasks import generate_data_task
 
 from schemas.models import Schema, Column, DataSet
 from schemas.forms import DataSetForm
@@ -95,7 +96,10 @@ class DataSetView(FormMixin, ListView):
         form.instance.schema_id = self.schema_id
         form.instance.status = DataSet.Status.PROCESSING
 
-        form.save()
+        dataset = form.save()
+
+        generate_data_task.delay(dataset.id)
+
         return super().form_valid(form)
 
     def post(self, request, *args, **kwargs):
@@ -111,6 +115,7 @@ class DataSetView(FormMixin, ListView):
 
     def dispatch(self, request, *args, **kwargs):
         self.schema_id = kwargs["pk"]
+        generate_data_task.delay(2)
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
