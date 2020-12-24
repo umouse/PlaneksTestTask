@@ -1,4 +1,6 @@
 import csv
+
+from django.conf import settings
 from faker import Faker
 from fake_csv.celery import app
 
@@ -13,6 +15,9 @@ def generate_data_task(dataset_id):
         return
     schema = Schema.objects.filter(id=dataset.schema_id).first()
     columns = Column.objects.filter(schema=schema.id).values()
+    delimeter = schema.column_separator
+    quotechar = schema.string_character
+
     row_number = dataset.rows
     header = []
     all_rows = []
@@ -48,8 +53,11 @@ def generate_data_task(dataset_id):
             raw_row.append(data)
         all_rows.append(raw_row)
 
-    with open('media/fake.csv', 'w') as csvfile:
-        writer = csv.writer(csvfile)
+    with open(f'{settings.MEDIA_ROOT}schema_{schema.id}dataset_{dataset_id}.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile, delimiter=delimeter, quotechar=quotechar, quoting=csv.QUOTE_ALL)
         writer.writerow(header)
         writer.writerows(all_rows)
+
+        dataset.status = dataset.Status.READY
+        dataset.save()
 

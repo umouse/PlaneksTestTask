@@ -35,7 +35,7 @@
             </td>
 
             <td>
-                <a href="/media/fake.csv"><button type="button" class="btn btn-link">Download</button></a>
+                <a href="{{ MEDIA_URL }}schema_{{dataset.schema_id}}dataset_{{dataset.id}}.csv"><button type="button" class="btn btn-link">Download</button></a>
             </td>
         </tr>
         {% endfor %}
