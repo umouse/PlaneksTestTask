@@ -1,1 +1,1 @@
-web: gunicorn PlaneksTestTask.wsgi
+web: gunicorn fake_csv.wsgi & celery --app=fake_csv worker & wait -n
