@@ -16,7 +16,7 @@ column_formset = inlineformset_factory(
         )
 
 
-class SchemaListView(ListView):
+class SchemaListView(LoginRequiredMixin, ListView):
     model = Schema
 
 
@@ -78,12 +78,12 @@ class SchemaUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class SchemaDeleteView(DeleteView):
+class SchemaDeleteView(LoginRequiredMixin, DeleteView):
     model = Schema
     success_url = reverse_lazy('SchemaListView')
 
 
-class DataSetView(FormMixin, ListView):
+class DataSetView(LoginRequiredMixin, FormMixin, ListView):
     model = DataSet
     form_class = DataSetForm
 
