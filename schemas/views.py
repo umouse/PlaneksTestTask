@@ -10,9 +10,10 @@ from schemas.models import Schema, Column, DataSet
 from schemas.forms import DataSetForm
 
 column_formset = inlineformset_factory(
-            Schema, Column, fields=('name', 'column_types', 'order'),
-            labels={'name': 'Column name', 'column_types': 'Type', 'order': 'Order'},
-            can_order=False, can_delete=False
+            Schema, Column, fields=('name', 'column_type', 'order', 'range_from', 'range_to'),
+            labels={'name': 'Column name', 'column_type': 'Type',
+                    'order': 'Order', 'range_from': 'From', 'range_to': 'To'},
+            can_order=False, can_delete=True
         )
 
 

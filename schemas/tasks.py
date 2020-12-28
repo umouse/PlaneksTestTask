@@ -27,7 +27,7 @@ def generate_data_task(dataset_id):
     for row in range(row_number):
         raw_row = []
         for column in columns:
-            column_type = column["column_types"]
+            column_type = column["column_type"]
             if column_type == Column.FULL_NAME:
                 data = fake.name()
             elif column_type == Column.JOB:

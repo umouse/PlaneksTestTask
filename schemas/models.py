@@ -36,7 +36,7 @@ class Column(models.Model):
     name = models.CharField(max_length=200)
     range_from = models.IntegerField(null=True)
     range_to = models.IntegerField(null=True)
-    order = models.IntegerField(null=True)
+    order = models.PositiveIntegerField(null=True)
 
     FULL_NAME = 'Full name'
     JOB = 'Job'
@@ -61,7 +61,7 @@ class Column(models.Model):
         (ADDRESS, 'Address'),
         (DATE, 'Date')
     ]
-    column_types = models.CharField(
+    column_type = models.CharField(
         max_length=12,
         choices=COLUMN_TYPE_CHOICES
     )

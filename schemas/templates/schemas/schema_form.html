@@ -1,14 +1,32 @@
 {% extends 'schemas/base.html' %}
-{% load crispy_forms_tags %}
+<!--{% block script %}-->
+<!--<script>-->
+<!--    $( document ).ready(function() {-->
+<!--       $("[id$='column_type']").change(() => {-->
+<!--       $(this).val() == "text":-->
+<!--         -->
+<!--            }-->
+<!--       )-->
+<!--});-->
+<!--</script>-->
+<!--{% endblock %}-->
 
 {% block content %}
     <h1>New Schema</h1>
     <form method="post">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Submit</button>
-        <h2>Columns</h2>
-        {{columns.as_p}}
-<!--            {% crispy columns helper %}-->
+        <h2>Schema columns</h2>
+        {%for column in columns%}
+        <div>
+            {{column.name.label}} {{column.name}}
+            {{column.column_type.label}} {{column.column_type}}
+            {{column.range_from.label}} {{column.range_from}}
+            {{column.range_to.label}} {{column.range_to}}
+            {{column.order.label}} {{column.order}}
+            <button type="button" class="btn btn-outline-danger">Delete</button>
+        </div>
+        {%endfor%}
         <button type="button" class="btn btn-primary">Add column</button>
     </form>
 {% endblock %}
