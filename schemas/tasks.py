@@ -14,7 +14,7 @@ def generate_data_task(dataset_id):
     if not dataset:
         return
     schema = Schema.objects.filter(id=dataset.schema_id).first()
-    columns = Column.objects.filter(schema=schema.id).values()
+    columns = Column.objects.filter(schema=schema.id).order_by("order").values()
     delimeter = schema.column_separator
     quotechar = schema.string_character
 
@@ -41,9 +41,19 @@ def generate_data_task(dataset_id):
             elif column_type == Column.COMPANY_NAME:
                 data = fake.company()
             elif column_type == Column.TEXT:
-                data = fake.text()
+                data = fake.sentences(
+                    nb=fake.random_int(
+                        min=column["range_from"] or 1,
+                        max=column["range_to"] or 10
+                    )
+                )
+                data =" ".join(data)
+
             elif column_type == Column.INTEGER:
-                data = fake.random_int()
+                data = fake.random_int(
+                    min=column["range_from"] or 0,
+                    max=column["range_to"] or 99999
+                )
             elif column_type == Column.ADDRESS:
                 data = fake.address()
             elif column_type == Column.DATE:

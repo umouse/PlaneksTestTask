@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.forms.models import inlineformset_factory
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, FormView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 from schemas.tasks import generate_data_task
 
@@ -18,6 +18,10 @@ column_formset = inlineformset_factory(
 
 class SchemaListView(LoginRequiredMixin, ListView):
     model = Schema
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user)
 
 
 class SchemaCreateView(LoginRequiredMixin, CreateView):
@@ -37,12 +41,11 @@ class SchemaCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         context = self.get_context_data()
         columns = context["columns"]
-        self.object = form.save()
-        if columns.is_valid():
-            columns.instance = self.object
-            columns.save()
-        else:
+        if not columns.is_valid():
             return super().form_invalid(form)
+        self.object = form.save()
+        columns.instance = self.object
+        columns.save()
         return super().form_valid(form)
 
 
@@ -63,12 +66,11 @@ class SchemaUpdateView(LoginRequiredMixin, UpdateView):
         form.instance.user = self.request.user
         context = self.get_context_data()
         columns = context["columns"]
-        self.object = form.save()
-        if columns.is_valid():
-            columns.instance = self.object
-            columns.save()
-        else:
+        if not columns.is_valid():
             return super().form_invalid(form)
+        self.object = form.save()
+        columns.instance = self.object
+        columns.save()
         return super().form_valid(form)
 
 

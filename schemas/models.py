@@ -34,8 +34,8 @@ class Schema(models.Model):
 class Column(models.Model):
     schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    range_from = models.IntegerField(null=True)
-    range_to = models.IntegerField(null=True)
+    range_from = models.IntegerField(null=True, blank=True)
+    range_to = models.IntegerField(null=True, blank=True)
     order = models.PositiveIntegerField(null=True)
 
     FULL_NAME = 'Full name'
