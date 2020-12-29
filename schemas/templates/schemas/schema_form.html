@@ -1,21 +1,38 @@
 {% extends 'schemas/base.html' %}
+{% load bootstrap4 %}
+
+{% block script%}
+    <script>
+    $( document ).ready(function() {
+        $('#add_column').click(function() {
+	        var form_idx = $('#id_column_set-TOTAL_FORMS').val();
+	        $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+	        $('#id_column_set-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+	    });
+    });
+    </script>
+{% endblock %}
 
 {% block content %}
     <h1>New Schema</h1>
-    <form method="post">{% csrf_token %}
-        {{ form.as_p }}
+    <form method="post">
+    {% csrf_token %}
+        {% bootstrap_form form %}
         <button type="submit" class="btn btn-primary">Submit</button>
         <h2>Schema columns</h2>
-        {%for column in columns%}
-        <div>
-            {{column.name.label}} {{column.name}}
-            {{column.column_type.label}} {{column.column_type}}
-            {{column.range_from.label}} {{column.range_from}}
-            {{column.range_to.label}} {{column.range_to}}
-            {{column.order.label}} {{column.order}}
-            <button type="button" class="btn btn-outline-danger">Delete</button>
+         {{ columns.management_form }}
+       <div id = 'form_set'>
+           {% for column in columns %}
+                <div class="form-inline">
+                    {% bootstrap_form column show_label=0 field_class='p-1 ' %}
+                </div>
+           {% endfor %}
+      </div>
+    <div id = "empty_form" class="d-none">
+        <div class="form-inline">
+            {% bootstrap_form columns.empty_form show_label=0 field_class='p-1 ' %}
         </div>
-        {%endfor%}
-        <button type="button" class="btn btn-primary">Add column</button>
+    </div>
+        <button type="button" class="btn btn-primary" id=add_column>Add column</button>
     </form>
 {% endblock %}

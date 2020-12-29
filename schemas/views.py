@@ -1,4 +1,3 @@
-from crispy_forms.helper import FormHelper
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.forms.models import inlineformset_factory
@@ -21,12 +20,6 @@ class SchemaListView(LoginRequiredMixin, ListView):
     model = Schema
 
 
-class ColumnFormSetHelper(FormHelper):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.template = 'bootstrap/table_inline_formset.html'
-
-
 class SchemaCreateView(LoginRequiredMixin, CreateView):
     model = Schema
     fields = ['name', 'column_separator', 'string_character']
@@ -34,8 +27,6 @@ class SchemaCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        helper = ColumnFormSetHelper()
-        data["helper"] = helper
         if self.request.POST:
             data["columns"] = column_formset(self.request.POST)
         else:
@@ -50,6 +41,8 @@ class SchemaCreateView(LoginRequiredMixin, CreateView):
         if columns.is_valid():
             columns.instance = self.object
             columns.save()
+        else:
+            return super().form_invalid(form)
         return super().form_valid(form)
 
 
@@ -60,8 +53,6 @@ class SchemaUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        helper = ColumnFormSetHelper()
-        data["helper"] = helper
         if self.request.POST:
             data["columns"] = column_formset(self.request.POST, instance=self.object)
         else:
@@ -76,6 +67,8 @@ class SchemaUpdateView(LoginRequiredMixin, UpdateView):
         if columns.is_valid():
             columns.instance = self.object
             columns.save()
+        else:
+            return super().form_invalid(form)
         return super().form_valid(form)
 
 
@@ -116,7 +109,6 @@ class DataSetView(LoginRequiredMixin, FormMixin, ListView):
 
     def dispatch(self, request, *args, **kwargs):
         self.schema_id = kwargs["pk"]
-        generate_data_task.delay(2)
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
