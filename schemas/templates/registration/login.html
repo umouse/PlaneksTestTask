@@ -1,12 +1,17 @@
+{% extends 'schemas/base.html' %}
+
 {% block title %}Login{% endblock %}
 
 {% block content %}
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Log In</button>
-</form>
+  <h2>Login</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Log in</button>
+  </form>
+
 {%endblock%}
 
 

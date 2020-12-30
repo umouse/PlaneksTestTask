@@ -1,4 +1,8 @@
-<form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
-    <input type="submit" value="Confirm">
-</form>
+{% extends 'schemas/base.html' %}
+
+{%block content%}
+    <form method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object.name }}" scheme?</p>
+        <input  class="btn btn-danger" type="submit" value="Confirm">
+    </form>
+{%endblock%}

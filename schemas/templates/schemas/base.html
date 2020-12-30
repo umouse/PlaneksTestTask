@@ -9,18 +9,20 @@
     {% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-         <div class="container-fluid">
-             <div class="navbar-brand mb-0 h1">Fake CSV </div>
-             <div class="flex-grow-1">
-                 <a class="nav-link" href="{% url 'SchemaListView' %}">Schemas</a>
+    {% if request.user.id %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+             <div class="container-fluid">
+                 <div class="navbar-brand mb-0 h1">Fake CSV </div>
+                 <div class="flex-grow-1">
+                     <a class="nav-link" href="{% url 'SchemaListView' %}">Schemas</a>
+                 </div>
+                 <div class="navbar-text">Hello, {{request.user}}</div>
+                 <div>
+                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                 </div>
              </div>
-             <div class="navbar-text">Hello, {{request.user}}</div>
-             <div>
-                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-             </div>
-         </div>
-    </nav>
+        </nav>
+    {% endif %}
 
     {% block content %}
     {% endblock %}
